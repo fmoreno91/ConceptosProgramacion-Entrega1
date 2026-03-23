@@ -1,0 +1,14 @@
+{
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-25",
+            "path": "",
+            "default": true
+        }
+    ],
+    "java.compile.nullAnalysis.mode": "automatic",
+    "[java]": {
+        "editor.defaultFormatter": "redhat.java",
+        "editor.formatOnSave": true
+    }
+}
