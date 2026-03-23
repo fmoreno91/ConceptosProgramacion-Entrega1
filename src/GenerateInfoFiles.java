@@ -11,8 +11,8 @@ public class GenerateInfoFiles {
     private static final String[] TIPOS_DOC = { "CC", "CE", "TI" };
 
     public static void main(String[] args) {
-        // Por ahora probaremos solo el de productos
         createProductsFile(10);
+        createSalesManInfoFile(5);
     }
 
     /**
@@ -35,11 +35,30 @@ public class GenerateInfoFiles {
         } catch (IOException e) {
             System.err.println("Error al crear archivo de productos: " + e.getMessage());
         }
-    } // <-- Esta llave cierra el MÉTODO
+    }
 
-    // Método para crear la info de los vendedores
+    /**
+     * Crea un archivo con información de vendedores.
+     * Formato: TipoDocumento;NúmeroDocumento;Nombres;Apellidos
+     */
     public static void createSalesManInfoFile(int salesmanCount) {
-        // Lógica pendiente...
+        File file = new File("data/vendedores.txt");
+        Random rand = new Random();
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+            for (int i = 0; i < salesmanCount; i++) {
+                String tipoDoc = TIPOS_DOC[rand.nextInt(TIPOS_DOC.length)];
+                long numeroDoc = 1000000000L + (long) (rand.nextDouble() * 900000000L); // Genera un número de 10
+                                                                                        // dígitos
+                String nombre = NOMBRES[rand.nextInt(NOMBRES.length)];
+                String apellido = APELLIDOS[rand.nextInt(APELLIDOS.length)];
+
+                writer.println(tipoDoc + ";" + numeroDoc + ";" + nombre + ";" + apellido);
+            }
+            System.out.println("Archivo de información de vendedores creado con éxito.");
+        } catch (IOException e) {
+            System.err.println("Error al crear archivo de vendedores: " + e.getMessage());
+        }
     }
 
     // Método para crear las ventas de UN vendedor
