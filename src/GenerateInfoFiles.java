@@ -1,95 +1,98 @@
 import java.io.*;
 import java.util.*;
 
+/**
+ * Class responsible for generating pseudo-random data files for the project.
+ * Includes products, salesman info, and individual sales files.
+ */
 public class GenerateInfoFiles {
 
-    // --- SEMILLAS DE DATOS ---
-    private static final String[] NOMBRES = { "Felipe", "Claudia", "Juan", "Elena", "Diego", "Andres", "Rosa", "Luis" };
-    private static final String[] APELLIDOS = { "Moreno", "Gomez", "Rodriguez", "Perez", "Sanchez", "Lopez", "Ruiz" };
-    private static final String[] PRODUCTOS_NOMBRES = { "Laptop", "Mouse", "Teclado", "Monitor", "Cámara", "USB",
-            "Audifonos" };
-    private static final String[] TIPOS_DOC = { "CC", "CE", "TI" };
+    // --- DATA SEEDS ---
+    private static final String[] FIRST_NAMES = { "Felipe", "Claudia", "Juan", "Elena", "Diego", "Andres", "Rosa", "Luis" };
+    private static final String[] LAST_NAMES = { "Moreno", "Gomez", "Rodriguez", "Perez", "Sanchez", "Lopez", "Ruiz" };
+    private static final String[] PRODUCT_NAMES = { "Laptop", "Mouse", "Keyboard", "Monitor", "Camera", "USB", "Headphones" };
+    private static final String[] DOC_TYPES = { "CC", "CE", "TI" };
 
     public static void main(String[] args) {
+        // Execute the generation of all necessary files
         createProductsFile(10);
         createSalesManInfoFile(5);
     }
 
     /**
-     * Crea un archivo con información pseudoaleatoria de productos.
-     * Formato: IDProducto;NombreProducto;PrecioPorUnidad
+     * Creates a file with pseudo-random product information.
+     * Format: ProductID;ProductName;PricePerUnit
      */
     public static void createProductsFile(int productsCount) {
-        File file = new File("data/productos.txt");
+        File file = new File("data/products_info.txt");
         Random rand = new Random();
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
             for (int i = 1; i <= productsCount; i++) {
                 String id = "PROD" + i;
-                String nombre = PRODUCTOS_NOMBRES[rand.nextInt(PRODUCTOS_NOMBRES.length)];
-                int precio = 10000 + rand.nextInt(90000);
+                String name = PRODUCT_NAMES[rand.nextInt(PRODUCT_NAMES.length)];
+                int price = 10000 + rand.nextInt(90000);
 
-                writer.println(id + ";" + nombre + ";" + precio);
+                writer.println(id + ";" + name + ";" + price);
             }
-            System.out.println("Archivo de productos creado con éxito.");
+            System.out.println("Products file created successfully.");
         } catch (IOException e) {
-            System.err.println("Error al crear archivo de productos: " + e.getMessage());
+            System.err.println("Error creating products file: " + e.getMessage());
         }
     }
 
     /**
-     * Crea un archivo con información de vendedores.
-     * Formato: TipoDocumento;NúmeroDocumento;Nombres;Apellidos
+     * Creates a file with salesman information and triggers individual sales files.
+     * Format: DocumentType;DocumentNumber;FirstNames;LastNames
      */
     public static void createSalesManInfoFile(int salesmanCount) {
-        File file = new File("data/vendedores.txt");
+        File file = new File("data/salesmen_info.txt");
         Random rand = new Random();
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
             for (int i = 0; i < salesmanCount; i++) {
-                String tipoDoc = TIPOS_DOC[rand.nextInt(TIPOS_DOC.length)];
-                long numeroDoc = 1000000000L + (long) (rand.nextDouble() * 900000000L);
-                String nombre = NOMBRES[rand.nextInt(NOMBRES.length)];
-                String apellido = APELLIDOS[rand.nextInt(APELLIDOS.length)];
+                String docType = DOC_TYPES[rand.nextInt(DOC_TYPES.length)];
+                long docNumber = 1000000000L + (long) (rand.nextDouble() * 900000000L);
+                String firstName = FIRST_NAMES[rand.nextInt(FIRST_NAMES.length)];
+                String lastName = LAST_NAMES[rand.nextInt(LAST_NAMES.length)];
 
-                // 1. Guardamos al vendedor en el archivo maestro
-                writer.println(tipoDoc + ";" + numeroDoc + ";" + nombre + ";" + apellido);
+                // 1. Save salesman to the master information file
+                writer.println(docType + ";" + docNumber + ";" + firstName + ";" + lastName);
 
-                // 2. Le creamos su propio archivo de ventas (ej. entre 3 y 8 ventas)
-                int ventasAleatorias = 3 + rand.nextInt(6);
-                createSalesMenFile(ventasAleatorias, tipoDoc, numeroDoc);
+                // 2. Generate an individual sales file for this specific salesman
+                int randomSalesCount = 3 + rand.nextInt(6);
+                createSalesMenFile(randomSalesCount, docType, docNumber);
             }
-            System.out.println("Proceso completo de vendedores y ventas finalizado.");
+            System.out.println("Full process for salesmen and sales files completed.");
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
         }
     }
 
     /**
-     * Crea un archivo de ventas para un vendedor específico.
-     * Formato línea 1: TipoDocumento;NúmeroDocumento
-     * Formato líneas siguientes: IDProducto;CantidadVendido
+     * Creates a sales report file for a specific salesman.
+     * Line 1: DocumentType;DocumentNumber
+     * Following lines: ProductID;QuantitySold
      */
-    public static void createSalesMenFile(int randomSalesCount, String tipoDoc, long id) {
-        // El nombre del archivo incluye el ID para que sea único
-        File file = new File("data/ventas_" + id + ".txt");
+    public static void createSalesMenFile(int randomSalesCount, String docType, long id) {
+        // File name includes the ID to ensure it is unique
+        File file = new File("data/sales_" + id + ".txt");
         Random rand = new Random();
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-            // Primera línea requerida: Info del vendedor
-            writer.println(tipoDoc + ";" + id);
+            // First line: Salesman identification
+            writer.println(docType + ";" + id);
 
-            // Generamos 'randomSalesCount' cantidad de ventas aleatorias
+            // Generate 'randomSalesCount' of random sales entries
             for (int i = 0; i < randomSalesCount; i++) {
-                int idProductoAleatorio = 1 + rand.nextInt(10); // Asumiendo que creamos 10 productos
-                int cantidad = 1 + rand.nextInt(20); // Cantidad entre 1 y 20
+                int randomProductId = 1 + rand.nextInt(10); 
+                int quantity = 1 + rand.nextInt(20);
 
-                writer.println("PROD" + idProductoAleatorio + ";" + cantidad);
+                writer.println("PROD" + randomProductId + ";" + quantity);
             }
-            System.out.println("Archivo de ventas para el ID " + id + " creado.");
+            System.out.println("Sales file for ID " + id + " created.");
         } catch (IOException e) {
-            System.err.println("Error al crear ventas del vendedor " + id + ": " + e.getMessage());
+            System.err.println("Error creating sales file for salesman " + id + ": " + e.getMessage());
         }
     }
-
 }

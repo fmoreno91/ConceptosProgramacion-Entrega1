@@ -23,7 +23,7 @@ The program developed in the `GenerateInfoFiles` class performs the following ta
 ## 👤 Author
 * **Andrés Felipe Moreno Suárez** - Software Engineering Student - Politécnico Grancolombiano.
 
-========================================================================================================================================
+============================================================================
 
 # Proyecto: Conceptos Fundamentales de Programación - Entrega 1
 
