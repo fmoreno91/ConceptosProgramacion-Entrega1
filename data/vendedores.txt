@@ -1,5 +1,0 @@
-TI;1408113038;Juan;Moreno
-TI;1332008712;Felipe;Moreno
-TI;1413177137;Juan;Gomez
-TI;1473266727;Rosa;Rodriguez
-CC;1323246450;Juan;Ruiz
