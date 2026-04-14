@@ -1,5 +1,5 @@
-TI;1441323621;Andres;Perez
-CE;1018497421;Elena;Sanchez
-TI;1262759612;Felipe;Perez
-TI;1106956332;Diego;Moreno
-TI;1426566692;Luis;Lopez
+CC;1367780560;Elena;Sanchez
+TI;1885724336;Andres;Moreno
+TI;1663451603;Felipe;Lopez
+CE;1402193827;Elena;Lopez
+CC;1723015811;Rosa;Perez
