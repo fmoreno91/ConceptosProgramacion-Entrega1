@@ -2,49 +2,84 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    // Corrected: Added 'final' as it's initialized once
+    // Corrección 1 y 2: Se agregó 'final' porque las colecciones no se reasignan
     private static final Map<String, Integer> productPrices = new HashMap<>();
+    private static final List<Salesman> salesmenList = new ArrayList<>();
 
     public static void main(String[] args) {
-        System.out.println("--- Starting Preliminary Sales Processing ---");
-        
-        // 1. Load products into memory
-        loadProducts();
-
-        // 2. Process sales files (Preliminary logic)
-        processAllSales();
-
-        System.out.println("--- Preliminary Processing Finished ---");
+        try {
+            loadProducts();
+            loadSalesmen();
+            processSales();
+            generateFinalReport();
+            System.out.println("Final report generated successfully.");
+        } catch (IOException | NumberFormatException e) { 
+            // Corrección 3: Reemplazado Exception genérica por multicatch específico
+            System.err.println("An error occurred during processing: " + e.getMessage());
+        }
     }
 
-    private static void loadProducts() {
+    private static void loadProducts() throws IOException {
         File file = new File("data/products_info.txt");
-        try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNextLine()) {
-                String[] data = scanner.nextLine().split(";");
-                if (data.length == 3) {
-                    // Corrected: Simplified parsing to avoid unnecessary temporary conversion
-                    productPrices.put(data[0], Integer.valueOf(data[2]));
+        try (Scanner sc = new Scanner(file)) {
+            while (sc.hasNextLine()) {
+                String[] data = sc.nextLine().split(";");
+                // Corrección 4: Se optimizó Integer.parseInt eliminando temporales innecesarios
+                productPrices.put(data[0], Integer.valueOf(data[2]));
+            }
+        }
+    }
+
+    private static void loadSalesmen() throws IOException {
+        File file = new File("data/salesmen_info.txt");
+        try (Scanner sc = new Scanner(file)) {
+            while (sc.hasNextLine()) {
+                String[] data = sc.nextLine().split(";");
+                salesmenList.add(new Salesman(data[0], Long.parseLong(data[1]), data[2], data[3]));
+            }
+        }
+    }
+
+    private static void processSales() {
+        for (Salesman s : salesmenList) {
+            File file = new File("data/sales_" + s.id + ".txt");
+            if (file.exists()) {
+                try (Scanner sc = new Scanner(file)) {
+                    sc.nextLine(); // Skip header
+                    while (sc.hasNextLine()) {
+                        String[] data = sc.nextLine().split(";");
+                        int price = productPrices.getOrDefault(data[0], 0);
+                        int quantity = Integer.parseInt(data[1]);
+                        s.totalSales += (long) price * quantity;
+                    }
+                } catch (IOException e) {
+                    System.err.println("Error reading sales for ID: " + s.id);
                 }
             }
-            System.out.println("Loaded " + productPrices.size() + " products.");
-        } catch (FileNotFoundException e) {
-            System.err.println("Error: products_info.txt not found.");
+        }
+        salesmenList.sort((s1, s2) -> Long.compare(s2.totalSales, s1.totalSales));
+    }
+
+    private static void generateFinalReport() throws IOException {
+        File file = new File("data/final_report.txt");
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+            writer.println("--- FINAL SALES REPORT ---");
+            writer.println("Name;ID;TotalCollected");
+            for (Salesman s : salesmenList) {
+                writer.println(s.firstName + " " + s.lastName + ";" + s.id + ";" + s.totalSales);
+            }
         }
     }
 
-    private static void processAllSales() {
-        File folder = new File("data");
-        File[] files = folder.listFiles((dir, name) -> name.startsWith("sales_") && name.endsWith(".txt"));
+    static class Salesman {
+        String firstName, lastName; // Corrección 5: Se eliminó docType porque nunca se usaba
+        long id, totalSales = 0;
 
-        if (files == null || files.length == 0) {
-            System.out.println("No sales files found to process.");
-            return;
-        }
-
-        for (File file : files) {
-            System.out.println("Processing: " + file.getName());
-            // Preliminary logic for Milestone 2
+        Salesman(String docType, long id, String firstName, String lastName) {
+            // docType se recibe pero no se guarda para evitar la advertencia de "never read"
+            this.id = id;
+            this.firstName = firstName;
+            this.lastName = lastName;
         }
     }
 }
