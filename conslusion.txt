@@ -1,0 +1,10 @@
+--- CONCLUSIONES DEL PROYECTO ---
+
+1. APRENDIZAJES ADQUIRIDOS:
+Durante el desarrollo de este proyecto, logré entender cómo interactúan diferentes archivos de texto para formar un sistema de información. Aprendí a manejar estructuras de datos en Java, como los HashMap, para buscar información de manera rápida (como los precios de los productos) y a utilizar listas para organizar y ordenar objetos. También fue muy importante el aprendizaje de Git y GitHub para llevar un control ordenado de las versiones del código.
+
+2. APLICACIONES PROFESIONALES:
+Las destrezas practicadas en este trabajo, como la lectura automatizada de archivos y la generación de reportes, son fundamentales en el mundo laboral. Como futuro ingeniero, saber procesar datos sin intervención manual es clave para tareas de automatización, gestión de inventarios o análisis de ventas en cualquier empresa. El uso de herramientas de control de versiones es, además, una habilidad obligatoria para trabajar en equipos de desarrollo profesionales.
+
+3. DIFICULTADES PRESENTADAS:
+La mayor dificultad fue coordinar la sincronización entre el repositorio local en VS Code y el repositorio remoto en GitHub, especialmente cuando se hicieron cambios manuales en la web que causaron conflictos de historial. En la parte de programación, el reto principal fue asegurar que el programa leyera correctamente los archivos de cada vendedor y relacionara los IDs de los productos con sus respectivos precios sin generar errores de ejecución.
